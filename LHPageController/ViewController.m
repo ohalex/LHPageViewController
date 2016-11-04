@@ -8,15 +8,16 @@
 
 #import "ViewController.h"
 #import "LHPageController.h"
-@interface ViewController ()
+@interface ViewController () <LHPageControllerDataSource>
 
+@property (strong, nonatomic) NSArray *controllers;
+@property (strong, nonatomic) NSArray *titles;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     UIViewController * vc1 = [[UIViewController alloc]init];
     vc1.view.backgroundColor = [UIColor redColor];
     vc1.title = @"今日天气";
@@ -41,17 +42,47 @@
     UIViewController * vc8 = [[UIViewController alloc]init];
     vc8.view.backgroundColor = [UIColor blueColor];
     vc8.title = @"小学生";
+    self.controllers = @[vc1,vc2,vc3,vc4,vc5,vc6,vc7,vc8];
+    self.titles = @[@"今日天气",@"明日日天",@"昨夜秋风",@"春风不度玉门关",@"小明小红小白",@"哈哈哈哈",@"冰与火之歌",@"小学生"];
     
-    LHPageController * page = [[LHPageController alloc]initWithControllers:@[vc1,vc2,vc3,vc4,vc5,vc6,vc7,vc8]];
+    NSDictionary *attributes = @{kLPListBarIndicatorBarColorAttribute : [UIColor orangeColor],
+                                 kLPListBarIndicatorHeightAtrribute : @2,
+                                 kLPListBarNormalTitleColorAttribute : [UIColor blackColor],
+                                 kLPListBarSelectedTitleColorAttribute : [UIColor orangeColor],
+                                 kLPListBarItemInterSpaceAttribute : @20,
+                                 kLPListBarTitleFontAttribute : [UIFont systemFontOfSize:14]};
+    
+    LHPageController * page = [[LHPageController alloc]initWithAttributes:attributes];
+    page.datasource = self;
+    
     page.view.frame = CGRectMake(0, 20, 375, 647);
     
     self.view.backgroundColor = [UIColor whiteColor];
     [self addChildViewController:page];
-    
     [self.view addSubview:page.view];
+    [self didMoveToParentViewController:self];
+    
+    
+    
     
 }
 
+-(NSInteger)numberOfChildControllersForPageController:(LHPageController *)pageController
+{
+    
+
+    return self.controllers.count;
+}
+
+- (UIViewController *)pageController:(LHPageController *)pageController childControllerAtIndex:(NSInteger)index
+{
+    return self.controllers[index];
+    
+}
+-(NSString *)titleForListBarItemAtIndex:(NSInteger)index
+{
+    return self.titles[index];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

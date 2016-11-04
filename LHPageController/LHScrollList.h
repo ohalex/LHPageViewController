@@ -17,7 +17,11 @@
  *  @param scrollList 滑动列表
  *  @param index      列表项索引
  */
--(void)scrollList:(LHScrollList *)scrollList didClickItemAtIndex:(NSInteger)index;
+- (void)scrollList:(LHScrollList *)scrollList didClickItemAtIndex:(NSInteger)index;
+
+- (NSString *)scrollList:(LHScrollList *)scrollList titleForItemAtIndex:(NSInteger)index;
+
+- (NSInteger)numberOfItemsForScrollList:(LHScrollList *)scrollList;
 
 @end
 
@@ -32,11 +36,22 @@
 
 - (void)moveToItemAtIndex:(NSInteger)index;
 
+//移除所有item，根据数据源重新布局
+- (void)reloadlist;
 
 /**
  *  列表项title数组
  */
-@property (copy, nonatomic) NSArray<NSString *> * titles;
+@property (copy, nonatomic, readonly) NSArray<NSString *> * titles;
+
+@property (strong, nonatomic) UIFont *titleFont;
+@property (assign, nonatomic) CGFloat indicatorBarHeight;
+@property (strong, nonatomic) UIColor *indicatorBarColor;
+@property (strong, nonatomic) UIColor *selectedTitleColor;
+@property (strong, nonatomic) UIColor *normalTitleColor;
+@property (assign, nonatomic) CGFloat itemInterSpace;
+@property (assign, nonatomic) CGSize itemSize;
+@property (assign, nonatomic) BOOL itemShouldSizeFit;
 
 @property (weak, nonatomic) id<LHScrollListDelegate> delegate;
 

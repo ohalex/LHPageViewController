@@ -13,9 +13,9 @@
 		FA52255F1D4AF5820019A60D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA52255D1D4AF5820019A60D /* Main.storyboard */; };
 		FA5225611D4AF5820019A60D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FA5225601D4AF5820019A60D /* Assets.xcassets */; };
 		FA5225641D4AF5820019A60D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA5225621D4AF5820019A60D /* LaunchScreen.storyboard */; };
-		FA5225711D4AF63F0019A60D /* LHScrollList.m in Sources */ = {isa = PBXBuildFile; fileRef = FA52256E1D4AF63F0019A60D /* LHScrollList.m */; };
-		FA5225721D4AF63F0019A60D /* LHPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5225701D4AF63F0019A60D /* LHPageView.m */; };
-		FA5225751D4AF64A0019A60D /* LHPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5225741D4AF64A0019A60D /* LHPageController.m */; };
+		FA8CDDA01DCA05C80037FA9D /* LHPageController.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8CDD9F1DCA05C80037FA9D /* LHPageController.m */; };
+		FA8CDDA51DCA05D20037FA9D /* LHPageView.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8CDDA21DCA05D20037FA9D /* LHPageView.m */; };
+		FA8CDDA61DCA05D20037FA9D /* LHScrollList.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8CDDA41DCA05D20037FA9D /* LHScrollList.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,12 +29,12 @@
 		FA5225601D4AF5820019A60D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA5225631D4AF5820019A60D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FA5225651D4AF5820019A60D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		FA52256D1D4AF63F0019A60D /* LHScrollList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHScrollList.h; sourceTree = "<group>"; };
-		FA52256E1D4AF63F0019A60D /* LHScrollList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHScrollList.m; sourceTree = "<group>"; };
-		FA52256F1D4AF63F0019A60D /* LHPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHPageView.h; sourceTree = "<group>"; };
-		FA5225701D4AF63F0019A60D /* LHPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHPageView.m; sourceTree = "<group>"; };
-		FA5225731D4AF64A0019A60D /* LHPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHPageController.h; sourceTree = "<group>"; };
-		FA5225741D4AF64A0019A60D /* LHPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHPageController.m; sourceTree = "<group>"; };
+		FA8CDD9E1DCA05C80037FA9D /* LHPageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHPageController.h; sourceTree = "<group>"; };
+		FA8CDD9F1DCA05C80037FA9D /* LHPageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHPageController.m; sourceTree = "<group>"; };
+		FA8CDDA11DCA05D20037FA9D /* LHPageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHPageView.h; sourceTree = "<group>"; };
+		FA8CDDA21DCA05D20037FA9D /* LHPageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHPageView.m; sourceTree = "<group>"; };
+		FA8CDDA31DCA05D20037FA9D /* LHScrollList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LHScrollList.h; sourceTree = "<group>"; };
+		FA8CDDA41DCA05D20037FA9D /* LHScrollList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LHScrollList.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +92,9 @@
 		FA52256B1D4AF5B40019A60D /* LHPageViewController */ = {
 			isa = PBXGroup;
 			children = (
-				FA5225731D4AF64A0019A60D /* LHPageController.h */,
-				FA5225741D4AF64A0019A60D /* LHPageController.m */,
+				FAD71C771DCB6B5700182BDE /* model */,
+				FA8CDD9E1DCA05C80037FA9D /* LHPageController.h */,
+				FA8CDD9F1DCA05C80037FA9D /* LHPageController.m */,
 				FA52256C1D4AF60A0019A60D /* LHScrollView */,
 			);
 			name = LHPageViewController;
@@ -102,12 +103,19 @@
 		FA52256C1D4AF60A0019A60D /* LHScrollView */ = {
 			isa = PBXGroup;
 			children = (
-				FA52256D1D4AF63F0019A60D /* LHScrollList.h */,
-				FA52256E1D4AF63F0019A60D /* LHScrollList.m */,
-				FA52256F1D4AF63F0019A60D /* LHPageView.h */,
-				FA5225701D4AF63F0019A60D /* LHPageView.m */,
+				FA8CDDA11DCA05D20037FA9D /* LHPageView.h */,
+				FA8CDDA21DCA05D20037FA9D /* LHPageView.m */,
+				FA8CDDA31DCA05D20037FA9D /* LHScrollList.h */,
+				FA8CDDA41DCA05D20037FA9D /* LHScrollList.m */,
 			);
 			name = LHScrollView;
+			sourceTree = "<group>";
+		};
+		FAD71C771DCB6B5700182BDE /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -136,7 +144,7 @@
 		FA5225491D4AF5820019A60D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "陈汉鑫";
 				TargetAttributes = {
 					FA5225501D4AF5820019A60D = {
@@ -181,11 +189,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA5225721D4AF63F0019A60D /* LHPageView.m in Sources */,
-				FA5225711D4AF63F0019A60D /* LHScrollList.m in Sources */,
+				FA8CDDA61DCA05D20037FA9D /* LHScrollList.m in Sources */,
+				FA8CDDA51DCA05D20037FA9D /* LHPageView.m in Sources */,
 				FA52255C1D4AF5820019A60D /* ViewController.m in Sources */,
 				FA5225591D4AF5820019A60D /* AppDelegate.m in Sources */,
-				FA5225751D4AF64A0019A60D /* LHPageController.m in Sources */,
+				FA8CDDA01DCA05C80037FA9D /* LHPageController.m in Sources */,
 				FA5225561D4AF5820019A60D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -226,8 +234,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -270,8 +280,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -341,6 +353,7 @@
 				FA52256A1D4AF5820019A60D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

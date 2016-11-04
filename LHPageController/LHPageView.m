@@ -33,6 +33,7 @@
 @property (strong, nonatomic) UIScrollView * scrollView;
 @property (strong, nonatomic) NSMutableArray <LHPage *> * pages;
 
+
 @end
 @implementation LHPageView
 {
@@ -43,7 +44,8 @@
 - (instancetype)initWithNumberOfPages:(NSInteger)numberOfPages
 {
     if (self = [super init]) {
-        [self initializeWithNumberOfPages:numberOfPages];
+        _numberOfPages = numberOfPages;
+        [self resetPages];
     }
     return self;
 }
@@ -56,32 +58,52 @@
 {
     if (!_pages) {
         _pages = [NSMutableArray array];
-        
     }
     
     return _pages;
 }
+
+- (void)removePageAtIndex:(NSInteger)index
+{
+    if(self.pages.count <= index){
+        return;
+    }
+    
+    [self.pages[index].contentView removeFromSuperview];
+    self.pages[index].contentView = nil;
+}
+
+- (void)resetPages
+{
+    for (LHPage * page in self.pages) {
+        [page.contentView removeFromSuperview];
+        page.contentView = nil;
+    }
+    _numberOfPages = [self.delegate numberOfPagesForPageView:self];
+    
+    for(int i = 0;i < _numberOfPages;i++){
+        LHPage * page = [[LHPage alloc]initWithContentView:nil];
+        [self.pages addObject:page];
+    }
+}
+
+- (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)gesture
+{
+    if ([gesture isKindOfClass:[UIGestureRecognizer class]]) {
+        [self.scrollView.panGestureRecognizer requireGestureRecognizerToFail:gesture];
+    }
+}
+
 - (UIScrollView *)scrollView
 {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]init];
+        _scrollView.backgroundColor = [UIColor colorWithWhite:246 alpha:1];
         _scrollView.pagingEnabled = YES;
         _scrollView.showsHorizontalScrollIndicator = NO;
+        _scrollView.bounces = NO;
         _scrollView.delegate = self;
-        _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-        
         [self addSubview:_scrollView];
-        
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_scrollView]|"
-                                                                     options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                     metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(_scrollView)]];
-       
-        [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_scrollView]|"
-                                                                     options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                     metrics:nil
-                                                                       views:NSDictionaryOfVariableBindings(_scrollView)]];
-
     }
     return _scrollView;
 }
@@ -92,62 +114,46 @@
 }
 
 
-- (void)initializeWithNumberOfPages:(NSInteger)numberOfPages
-{
-    _numberOfPages = numberOfPages;
-    
-    for (LHPage * page in self.pages) {
-        [page.contentView removeFromSuperview];
-        
-    }
-    
-    self.pages = [[NSMutableArray alloc]initWithCapacity:self.numberOfPages];
-    for(int i = 0;i<self.numberOfPages;i++){
-        LHPage * page = [[LHPage alloc]initWithContentView:nil];
-        [self.pages addObject:page];
-    }
-    
-    
-    
-}
-
 - (void)moveToPageAtIndex:(NSInteger)index
 {
-    if (self.pages.count<=index ) {
+    if (self.pages.count <= index ) {
         return;
     }
     
     [self.scrollView setContentOffset:CGPointMake(index* _pageSize.width, 0) animated:labs(_currentPageIndex-index)>1?NO:YES];
+//    self.scrollView.contentOffset = CGPointMake(index * _pageSize.width, 0);
     _currentPageIndex = index;
+    
 }
 
 - (void)addPageWithView:(UIView *)contentView atIndex:(NSInteger)index
 {
     
-    if (self.pages.count<=index) {
+    if (self.pages.count <= index) {
         return;
     }
+    LHPage *page = [[LHPage alloc] initWithContentView:contentView];
     
-    self.pages[index].contentView = contentView;
+    [self.pages insertObject:page atIndex:index];
     
-    [self.scrollView addSubview:contentView];
+    [self.scrollView addSubview:page.contentView];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    
-    
-    NSInteger leftPageindex =floor(scrollView.contentOffset.x/_pageSize.width);
-    
-    CGFloat rightPageRatio = (scrollView.contentOffset.x-leftPageindex *_pageSize.width)/_pageSize.width;
-    
-    if ([self.delegate respondsToSelector:@selector(pageViewDidScroll:withLeftPageIndex:rightPageVisibleRect:)]) {
-        [self.delegate pageViewDidScroll:self withLeftPageIndex:leftPageindex rightPageVisibleRect:rightPageRatio];
-    }
-    
-
-    
-}
+//- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+//{
+//    
+//    
+//    NSInteger leftPageindex =floor(scrollView.contentOffset.x/_pageSize.width);
+//    
+//    CGFloat rightPageRatio = (scrollView.contentOffset.x-leftPageindex *_pageSize.width)/_pageSize.width;
+//    
+//    if ([self.delegate respondsToSelector:@selector(pageViewDidScroll:withLeftPageIndex:rightPageVisibleRect:)]) {
+//        [self.delegate pageViewDidScroll:self withLeftPageIndex:leftPageindex rightPageVisibleRect:rightPageRatio];
+//    }
+//    
+//
+//    
+//}
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
 {
@@ -161,6 +167,8 @@
 
 - (void)layoutSubviews
 {
+    [super layoutSubviews];
+    self.scrollView.frame = self.bounds;
     self.scrollView.contentSize = CGSizeMake( self.numberOfPages * _pageSize.width,_pageSize.height);
     
     [self.pages enumerateObjectsUsingBlock:^(LHPage * page, NSUInteger index, BOOL * stop) {

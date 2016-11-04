@@ -12,18 +12,21 @@
 
 @protocol LHPageViewDelegate <NSObject>
 
+@required
+- (NSInteger)numberOfPagesForPageView:(LHPageView *)pageView;
+
+@optional
 /**
  *  停止拖动pageView时回调
  *
  *  @param pageView pageView
  *  @param index    最终目标页面索引
  */
--(void)pageView:(LHPageView *)pageView WillEndDraggingAtIndex:(NSInteger)index;
+- (void)pageView:(LHPageView *)pageView WillEndDraggingAtIndex:(NSInteger)index;
 
-@optional
--(void)pageViewDidScroll:(LHPageView *)pageView
-       withLeftPageIndex:(NSInteger)index
-    rightPageVisibleRect:(CGFloat)ratio ;
+//-(void)pageViewDidScroll:(LHPageView *)pageView
+//       withLeftPageIndex:(NSInteger)index
+//    rightPageVisibleRect:(CGFloat)ratio ;
 
 
 @end
@@ -37,11 +40,9 @@
 - (instancetype)initWithNumberOfPages:(NSInteger)numberOfPages;
 
 /**
- *  重置／初始化页数
- *
- *  @param numberOfPages 页数
+ *  重置页数
  */
-- (void)initializeWithNumberOfPages:(NSInteger)numberOfPages;
+- (void)resetPages;
 
 /**
  *  页面移动
@@ -57,4 +58,13 @@
  *  @param index    索引
  */
 - (void)addPageWithView:(UIView *)contentView atIndex:(NSInteger)index;
+/**
+ *  移除内容页面
+ *
+ *  @param contentView 内容页面
+ *  @param index    索引
+ */
+- (void)removePageAtIndex:(NSInteger)index;
+
+- (void)requireGestureRecognizerToFail:(UIGestureRecognizer *)gesture;
 @end

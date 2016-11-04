@@ -43,7 +43,7 @@
     if (self) {
         
         self.userInteractionEnabled = YES;
-        
+        [self initialize];
         [self setupBackgroundView];
         [self setupTitlesBar];
         
@@ -54,11 +54,22 @@
     return self;
     
 }
+
+- (void)initialize
+{
+    _indicatorBarHeight = 2;
+    _titleFont = [UIFont systemFontOfSize:13];
+    _selectedTitleColor = [UIColor blueColor];
+    _indicatorBarColor = [UIColor blueColor];
+    _normalTitleColor = [UIColor blackColor];
+    _itemInterSpace = 20;
+    
+}
 - (UIView *)selectionIndicator
 {
     if (!_selectionIndicator) {
         _selectionIndicator = [UIView new];
-        _selectionIndicator.backgroundColor = [UIColor orangeColor];
+        _selectionIndicator.backgroundColor = _indicatorBarColor;
         
         _selectionIndicator.translatesAutoresizingMaskIntoConstraints = NO;
 
@@ -96,6 +107,7 @@
                                                                 metrics:nil
                                                                   views:NSDictionaryOfVariableBindings(titlesBar)]];
 }
+
 - (void)setupBackgroundView
 {
     self.backgroundColor = [UIColor whiteColor];
@@ -117,17 +129,22 @@
 
 }
 
-- (void)setFrame:(CGRect)frame
+- (void)reloadlist
 {
-    frame.size.height = 38;
-    [super setFrame:frame];
+    NSInteger numberOfItems = [self.delegate numberOfItemsForScrollList:self];
+    NSMutableArray *titles = [NSMutableArray array];
+    for (int i = 0; i < numberOfItems; i++) {
+        NSString *title = [self.delegate scrollList:self titleForItemAtIndex:i];
+        [titles addObject:title];
+    }
+    
+    _titles = [titles copy];
+    
+    [self setupIndicatorAndBarItems];
+    
 }
 
-- (void)setTitles:(NSArray<NSString *> *)titles
-{
-    _titles = titles;
-    [self setupIndicatorAndBarItems];
-}
+
 - (void)setupIndicatorAndBarItems
 {
     [_selectionIndicator removeFromSuperview];
@@ -173,16 +190,22 @@
    
         
         
-        UIButton * item = [UIButton buttonWithType:UIButtonTypeCustom];
+        UIButton * item = [UIButton new];
         item.backgroundColor = [UIColor clearColor];
         [item setTitle:title forState:UIControlStateNormal];
-        [item setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [item setTitleColor:[UIColor orangeColor] forState:UIControlStateSelected];
-        item.titleLabel.font = [UIFont systemFontOfSize:15];
+        [item setTitleColor:self.normalTitleColor forState:UIControlStateNormal];
+        [item setTitleColor:self.selectedTitleColor forState:UIControlStateSelected];
+        item.titleLabel.font = self.titleFont;
+        item.titleLabel.textAlignment = NSTextAlignmentCenter;
         item.tag = index;
         [item addTarget:self action:@selector(itemClicked:) forControlEvents:UIControlEventTouchUpInside];
         
-        [item sizeToFit];
+        if (self.itemShouldSizeFit) {
+            [item sizeToFit];
+        } else {
+            item.bounds = CGRectMake(0, 0, self.itemSize.width, self.itemSize.height);
+        }
+        
         item.translatesAutoresizingMaskIntoConstraints = NO;
         
         
@@ -193,14 +216,14 @@
         if (previousItem) {
             [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[previousItem]-spacing-[item]"
                                                                                    options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                                   metrics:@{@"spacing":@20}
+                                                                                   metrics:@{@"spacing":@(self.itemInterSpace)}
                                                                                      views:NSDictionaryOfVariableBindings(previousItem,item)]];
         }
         
         else {
             [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"|-padding-[item]"
                                                                                    options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                                   metrics:@{@"padding":@8}
+                                                                                   metrics:@{@"padding":@(self.itemInterSpace)}
                                                                                      views:NSDictionaryOfVariableBindings(item)]];
         }
         
@@ -221,21 +244,20 @@
     if (previousItem) {
         [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"[previousItem]-padding-|"
                                                                                options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                               metrics:@{@"padding":@8}
+                                                                               metrics:@{@"padding":@(self.itemInterSpace)}
                                                                                  views:NSDictionaryOfVariableBindings(previousItem)]];
     }
     
     
-    [self layoutIfNeeded];
     
     if (self.titles) {
         [self.titlesBar addSubview:self.selectionIndicator];
         
         [self.titlesBar addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[_selectionIndicator(height)]|"
                                                                      options:NSLayoutFormatDirectionLeadingToTrailing
-                                                                     metrics:@{@"height":@2}
+                                                                     metrics:@{@"height":@(self.indicatorBarHeight)}
                                                                        views:NSDictionaryOfVariableBindings(_selectionIndicator)]];
-        
+        [self layoutIfNeeded];
         
         [self itemClicked:[self.barItems firstObject]];
     }
@@ -270,12 +292,15 @@
     
     [self.titlesBar addConstraints:_indicatorConstraints];
     
-    [self layoutIfNeeded];
     
 }
 
 - (void)moveToItemAtIndex:(NSInteger)index
 {
+    if (self.barItems.count <= index) {
+        return;
+    }
+    
     self.barItems[_selectedItemIndex].selected = NO;
     UIButton * nextSelecteditem = self.barItems[index];
     nextSelecteditem.selected = YES;
@@ -285,6 +310,7 @@
     [UIView animateWithDuration:0.38 delay:0 usingSpringWithDamping:1 initialSpringVelocity:1 options:UIViewAnimationOptionCurveEaseInOut animations:^{
     
         [self alignSelectionIndicatorForItem:nextSelecteditem];
+        [self layoutIfNeeded];
         
     } completion:nil];
 
